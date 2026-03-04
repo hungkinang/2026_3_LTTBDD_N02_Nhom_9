@@ -13,7 +13,7 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   int index = 0;
 
-  final pages = const [HomeView(), HistoryView(), ProfileView()];
+  final pages = [const HomeView(), const HistoryView(), const ProfileView()];
 
   @override
   Widget build(BuildContext context) {

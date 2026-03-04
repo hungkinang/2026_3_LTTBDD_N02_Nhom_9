@@ -1,50 +1,63 @@
 import 'package:flutter/material.dart';
+import '../models/quiz_model.dart';
+import '../data/quiz_data.dart';
+import 'quiz_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
-  Widget quizItem(String title, String info, String level) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 14),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(color: Colors.black12, blurRadius: 6),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+  Widget quizItem(BuildContext context, Quiz quiz) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QuizView(quiz: quiz),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: const [
+            BoxShadow(color: Colors.black12, blurRadius: 6),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  quiz.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                Text(quiz.info),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
               ),
-              Text(info),
-            ],
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 6,
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                quiz.level,
+                style: const TextStyle(color: Colors.blue),
+              ),
             ),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              level,
-              style: const TextStyle(color: Colors.blue),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -70,19 +83,26 @@ class HomeView extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  "Quizzi",
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      "Quizzi",
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Icon(Icons.notifications_outlined, color: Colors.white),
+                  ],
                 ),
-                SizedBox(height: 20),
-                TextField(
+                const SizedBox(height: 20),
+                const TextField(
                   decoration: InputDecoration(
                     hintText: "Tìm kiếm",
+                    prefixIcon: Icon(Icons.search),
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -100,6 +120,16 @@ class HomeView extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _categoryIcon(Icons.calculate, "Toán", Colors.orange),
+                    _categoryIcon(Icons.book, "Tiếng Anh", Colors.blue),
+                    _categoryIcon(Icons.science, "Vật Lý", Colors.green),
+                    _categoryIcon(Icons.biotech, "Sinh Học", Colors.cyan),
+                  ],
+                ),
+                const SizedBox(height: 24),
                 const Text(
                   "Quiz Nổi Bật",
                   style: TextStyle(
@@ -108,35 +138,29 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                quizItem(
-                  "Toán Cơ Bản",
-                  "15 Câu | 10 Phút",
-                  "Dễ",
-                ),
-                quizItem(
-                  "Ngữ Pháp Tiếng Anh",
-                  "20 Câu | 15 Phút",
-                  "Trung Bình",
-                ),
-                quizItem(
-                  "Vật Lý Cơ Bản",
-                  "12 Câu | 10 Phút",
-                  "Khó",
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(14),
-                    backgroundColor: Colors.blue,
-                  ),
-                  onPressed: () {},
-                  child: const Text("Bắt đầu"),
-                ),
+                ...QuizData.quizzes.map((quiz) => quizItem(context, quiz)).toList(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _categoryIcon(IconData icon, String label, Color color) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: Colors.white),
+        ),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontSize: 12)),
+      ],
     );
   }
 }
