@@ -3,8 +3,25 @@ import '../models/quiz_model.dart';
 import '../data/quiz_data.dart';
 import 'quiz_view.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String _searchQuery = "";
+  String _selectedCategory = "Tất cả";
+
+  List<Quiz> get _filteredQuizzes {
+    return QuizData.quizzes.where((quiz) {
+      final matchesSearch = quiz.title.toLowerCase().contains(_searchQuery.toLowerCase());
+      final matchesCategory = _selectedCategory == "Tất cả" || 
+                             quiz.title.toLowerCase().contains(_selectedCategory.toLowerCase());
+      return matchesSearch && matchesCategory;
+    }).toList();
+  }
 
   Widget quizItem(BuildContext context, Quiz quiz) {
     return InkWell(
@@ -99,8 +116,13 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  decoration: const InputDecoration(
                     hintText: "Tìm kiếm",
                     prefixIcon: Icon(Icons.search),
                     filled: true,
@@ -120,25 +142,55 @@ class HomeView extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(20),
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _categoryIcon(Icons.calculate, "Toán", Colors.orange),
-                    _categoryIcon(Icons.book, "Tiếng Anh", Colors.blue),
-                    _categoryIcon(Icons.science, "Vật Lý", Colors.green),
-                    _categoryIcon(Icons.biotech, "Sinh Học", Colors.cyan),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  "Quiz Nổi Bật",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _categoryIcon(Icons.grid_view, "Tất cả", Colors.grey),
+                      const SizedBox(width: 15),
+                      _categoryIcon(Icons.calculate, "Toán", Colors.orange),
+                      const SizedBox(width: 15),
+                      _categoryIcon(Icons.book, "Anh", Colors.blue),
+                      const SizedBox(width: 15),
+                      _categoryIcon(Icons.science, "Vật Lý", Colors.green),
+                      const SizedBox(width: 15),
+                      _categoryIcon(Icons.biotech, "Sinh Học", Colors.cyan),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedCategory == "Tất cả" ? "Quiz Nổi Bật" : "Kết quả cho '$_selectedCategory'",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (_selectedCategory != "Tất cả")
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _selectedCategory = "Tất cả";
+                          });
+                        },
+                        child: const Text("Xóa lọc"),
+                      ),
+                  ],
+                ),
                 const SizedBox(height: 16),
-                ...QuizData.quizzes.map((quiz) => quizItem(context, quiz)).toList(),
+                if (_filteredQuizzes.isEmpty)
+                  const Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 40),
+                      child: Text("Không tìm thấy quiz nào!"),
+                    ),
+                  )
+                else
+                  ..._filteredQuizzes.map((quiz) => quizItem(context, quiz)).toList(),
               ],
             ),
           ),
@@ -148,19 +200,37 @@ class HomeView extends StatelessWidget {
   }
 
   Widget _categoryIcon(IconData icon, String label, Color color) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(12),
+    bool isSelected = _selectedCategory == label;
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _selectedCategory = label;
+        });
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: isSelected ? color : color.withValues(alpha: 0.7),
+              borderRadius: BorderRadius.circular(12),
+              border: isSelected ? Border.all(color: Colors.white, width: 2) : null,
+              boxShadow: isSelected ? [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 8, offset: const Offset(0, 4))] : null,
+            ),
+            child: Icon(icon, color: Colors.white),
           ),
-          child: Icon(icon, color: Colors.white),
-        ),
-        const SizedBox(height: 8),
-        Text(label, style: const TextStyle(fontSize: 12)),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              color: isSelected ? Colors.blue : Colors.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

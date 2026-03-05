@@ -59,5 +59,17 @@ class QuizData {
         ),
       ],
     ),
+    Quiz(
+      title: "Sinh Học Đại Cương",
+      info: "10 Câu | 8 Phút",
+      level: "Dễ",
+      questions: [
+        Question(
+          questionText: "Đơn vị cơ bản của sự sống là gì?",
+          options: ["Nguyên tử", "Tế bào", "Phân tử", "Mô"],
+          correctAnswerIndex: 1,
+        ),
+      ],
+    ),
   ];
 }
