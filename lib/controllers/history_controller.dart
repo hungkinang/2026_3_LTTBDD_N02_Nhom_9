@@ -19,11 +19,11 @@ class HistoryController {
 
   double getAverageScore() {
     if (FakeDB.histories.isEmpty) return 0;
-    double sum = 0;
+    double total = 0;
     for (var h in FakeDB.histories) {
-      sum += h.score / h.total * 10;
+      total += (h.score / h.total) * 10;
     }
-    return sum / FakeDB.histories.length;
+    return total / FakeDB.histories.length;
   }
 
   int totalQuizDone() {

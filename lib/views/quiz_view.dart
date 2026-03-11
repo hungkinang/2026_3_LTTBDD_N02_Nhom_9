@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/quiz_model.dart';
 import '../models/question_model.dart';
+import '../controllers/history_controller.dart';
 import 'result_view.dart';
 
 class QuizView extends StatefulWidget {
@@ -23,7 +24,10 @@ class _QuizViewState extends State<QuizView> {
   @override
   void initState() {
     super.initState();
-    userAnswers = List.filled(widget.quiz.questions.length, null);
+    userAnswers = List.filled(
+      widget.quiz.questions.length,
+      null,
+    );
     startTimer();
   }
 
@@ -55,6 +59,14 @@ class _QuizViewState extends State<QuizView> {
   }
 
   void navigateToResult() {
+    final historyController = HistoryController();
+
+    historyController.addHistory(
+      widget.quiz.title,
+      score,
+      widget.quiz.questions.length,
+    );
+
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -70,8 +82,11 @@ class _QuizViewState extends State<QuizView> {
 
   @override
   Widget build(BuildContext context) {
-    Question currentQuestion = widget.quiz.questions[currentQuestionIndex];
-    double progress = (currentQuestionIndex + 1) / widget.quiz.questions.length;
+    Question currentQuestion =
+        widget.quiz.questions[currentQuestionIndex];
+    double progress =
+        (currentQuestionIndex + 1) /
+        widget.quiz.questions.length;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
@@ -79,7 +94,10 @@ class _QuizViewState extends State<QuizView> {
         backgroundColor: Colors.blue,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -89,7 +107,10 @@ class _QuizViewState extends State<QuizView> {
         centerTitle: true,
         actions: [
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+            margin: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 16,
+            ),
             padding: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.2),
@@ -119,7 +140,12 @@ class _QuizViewState extends State<QuizView> {
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.green, Colors.yellow, Colors.orange, Colors.red],
+                    colors: [
+                      Colors.green,
+                      Colors.yellow,
+                      Colors.orange,
+                      Colors.red,
+                    ],
                   ),
                 ),
               ),
@@ -161,7 +187,8 @@ class _QuizViewState extends State<QuizView> {
                         onTap: () {
                           setState(() {
                             selectedAnswerIndex = index;
-                            userAnswers[currentQuestionIndex] = index;
+                            userAnswers[currentQuestionIndex] =
+                                index;
                           });
                         },
                         child: Container(
@@ -173,7 +200,9 @@ class _QuizViewState extends State<QuizView> {
                             color: selectedAnswerIndex == index
                                 ? Colors.blue.shade50
                                 : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(
+                              16,
+                            ),
                             border: Border.all(
                               color: selectedAnswerIndex == index
                                   ? Colors.blue
@@ -187,7 +216,9 @@ class _QuizViewState extends State<QuizView> {
                                 "${String.fromCharCode(65 + index)}. ",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: selectedAnswerIndex == index
+                                  color:
+                                      selectedAnswerIndex ==
+                                          index
                                       ? Colors.blue
                                       : Colors.black87,
                                 ),
@@ -196,7 +227,9 @@ class _QuizViewState extends State<QuizView> {
                                 child: Text(
                                   currentQuestion.options[index],
                                   style: TextStyle(
-                                    color: selectedAnswerIndex == index
+                                    color:
+                                        selectedAnswerIndex ==
+                                            index
                                         ? Colors.blue
                                         : Colors.black87,
                                     fontSize: 16,
@@ -220,10 +253,12 @@ class _QuizViewState extends State<QuizView> {
                   ? null
                   : () {
                       int currentScore = score;
-                      if (selectedAnswerIndex == currentQuestion.correctAnswerIndex) {
+                      if (selectedAnswerIndex ==
+                          currentQuestion.correctAnswerIndex) {
                         currentScore++;
                       }
-                      if (currentQuestionIndex < widget.quiz.questions.length - 1) {
+                      if (currentQuestionIndex <
+                          widget.quiz.questions.length - 1) {
                         setState(() {
                           score = currentScore;
                           currentQuestionIndex++;

@@ -100,7 +100,9 @@ class _LoginViewState extends State<LoginView> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Sai tài khoản"),
+                          content: Text(
+                            "Sai tài khoản hoặc mật khẩu",
+                          ),
                         ),
                       );
                     }
