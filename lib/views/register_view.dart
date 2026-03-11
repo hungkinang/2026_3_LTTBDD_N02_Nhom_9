@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/auth_controller.dart';
-import '../models/user_model.dart';
 import 'login_view.dart';
 
 class RegisterView extends StatefulWidget {

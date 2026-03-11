@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controllers/auth_controller.dart';
-import '../models/user_model.dart';
 import 'register_view.dart';
 import 'main_view.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../controllers/history_controller.dart';
 import 'history_view.dart';
+import 'leaderboard_view.dart';
 import 'login_view.dart';
 
 class ProfileView extends StatelessWidget {
@@ -114,7 +115,14 @@ class ProfileView extends StatelessWidget {
             button(
               "Bảng xếp hạng",
               Colors.transparent,
-              () {},
+              () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const LeaderboardView(),
+                  ),
+                );
+              },
               border: true,
             ),
             button("Tạo Quiz mới", Colors.green, () {}),
