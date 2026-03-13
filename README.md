@@ -31,29 +31,5 @@ lib/
 ├── models/      # Định nghĩa các đối tượng dữ liệu (User, Quiz, Question, History)
 ├── views/       # Giao diện người dùng (Login, Home, Quiz, Result, Profile, v.v.)
 └── main.dart    # Điểm khởi đầu của ứng dụng
-```
 
-## 🚀 Hướng dẫn cài đặt và chạy
-1. **Yêu cầu hệ thống**:
-   - Đã cài đặt Flutter SDK.
-   - IDE (VS Code, Android Studio) với plugin Flutter/Dart.
-
-2. **Cài đặt**:
-   ```bash
-   # Clone repository (nếu cần)
-   # git clone <v-link-repo>
-   
-   # Di chuyển vào thư mục dự án
-   # cd 2026_3_LTTBDD_N02_Nhom_9
-   
-   # Tải các package phụ thuộc
-   flutter pub get
-   ```
-
-3. **Chạy ứng dụng**:
-   ```bash
-   flutter run
-   ```
-
----
-*Dự án được thực hiện cho học phần Lập trình thiết bị di động - Nhóm N02.*
+*Dự án được thực hiện cho học phần Lập trình thiết bị di động - Lớp Lập trình cho thiết bị di động-1-2-25(N02)-.*
